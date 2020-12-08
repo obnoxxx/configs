@@ -1,0 +1,109 @@
+[user]
+	name = Michael Adam
+	email = obnox@samba.org
+
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+	interactive = auto
+
+[diff]
+	renames = copy
+
+[branch]
+	autosetupmerge = true
+
+[clean]
+	requireForce = true
+
+[alias]
+	ai = add -i
+	ap = add -p
+	di = diff -p --stat
+	cdi = diff -p --stat --cached
+	hdi = diff HEAD -p --stat
+	ds = diff --stat
+	cds = diff --cached --stat
+	hds = diff HEAD --stat
+	ci = commit
+	co = checkout
+	chp = cherry-pick
+	cpx = cherry-pick -x
+	cps = cherry-pick -s
+	cpxs = cherry-pick -x -s
+	cpa = cherry-pick --abort
+	br = branch
+	ru = remote update
+	st = status
+	shs = show -p --stat
+	s = status
+	sh = show -p --stat --pretty=fuller
+	l = log
+	lo = log --pretty=oneline
+	#lo = log --pretty=format:'%Cred%h%Creset %s'
+	lod = log --pretty=oneline --decorate --graph
+	la = log --pretty=format:'%Cred%h%Creset %Cblue%an%Creset %s'
+	lad = log --pretty=format:'%C(magenta)%h%Creset %Cgreen%ai%Creset %Cblue%an%Creset %C(red)%d%Creset %s'
+	ladx = log --pretty=format:'%Cred%h%Creset %Cgreen%ai%Creset %Cblue%an%Creset %C(magenta)%d%Creset %s'
+#	ladx = log --pretty=format:'%C(Yellow)%h%Creset %d %Cgreen%ai%Creset %Cblue%an%Creset %s'
+	ladnc = log --pretty=format:'%h %ai %an %s'
+	load = log --pretty=format:'%Cred%h%Creset %Cgreen%ai%Creset %Cblue%an%Creset %Cred%d%Creset %s' --graph
+	ledx = log --pretty=format:'%Cred%h%Creset %Cgreen%ai%Creset %Cblue%ae%Creset %s'
+	led = log --pretty=format:'%C(magenta)%h%Creset %Cgreen%ai%Creset %Cblue%ae%Creset %C(red)%d%Creset %s'
+	leee = log --pretty=format:'%h %ae %s'
+	lwoh = log --pretty=format:'%an %ae %s'
+	lcd = log --pretty=format:'%Cred%h%Creset %Cgreen%cn%Creset %Cred%cd%Creset %s'
+	le = log --pretty=format:'%Cred%h%Creset %Cgreen%ae%Creset %s'
+	ld = log --pretty=format:'%Cred%h%Creset %Cgreen%ai%Creset %s'
+	lp = log -p --stat
+	ami3 = am -i -3
+	fpstd = format-patch --stdout
+	wc = whatchanged -p --stat
+	klo = whatchanged -p --stat
+	wcy = whatchanged -p --stat --since='yesterday'
+	wcw = whatchanged -p --stat --since='1 weeks ago'
+	wcf = whatchanged -p --stat --pretty=fuller
+	wcyf = whatchanged -p --stat --pretty=fuller --since='yesterday'
+	wcwf = whatchanged -p --stat --pretty=fuller --since='1 weeks ago'
+	wcs = whatchanged --stat
+	wcys = whatchanged --stat --since='yesterday'
+	wcws = whatchanged --stat --since='1 weeks ago'
+	wcrw = whatchanged -p --stat --reverse --since='1 weeks ago'
+	rba = rebase --abort
+	rbs = rebase --skip
+	rbc = rebase --continue
+	rbi = rebase --interactive
+	rbt = rebase --edit-todo
+	w = status -b -s -uno
+
+[gc]
+	auto = 0
+	autopacklimit = 0
+	packrefs = false
+	autopackrefs = 0
+	# NOTE: never is available since git 1.7.0.3
+	#       older versions need '9000 days'
+	#
+	#       Usage of just an int value '9000'
+	#       will be mapped to 'now' and 'git gc'
+	#       will delete all your reflogs!!!!
+	#
+	reflogexpire = never
+	reflogexpireunreachable = never
+	# NOTE: here '9000 days' doesn't work here
+	#
+	# fatal: bad config value for 'gc.rerereresolved' in
+	# /home/metze/.gitconfig
+	# error: failed to run rerere
+	#
+	rerereresolved = 9000
+	rerereunresolved = 9000
+
+[merge]
+	tool = vimdiff
+	renameLimit = 1000000
+
+#
+# END
+#
