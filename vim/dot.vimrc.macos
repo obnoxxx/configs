@@ -1,0 +1,241 @@
+" 2004-04-20 mad
+"
+
+set nocompatible
+"set nocp
+
+set backup
+set noexpandtab
+
+set tabstop=8
+set shiftwidth=8
+
+" Activate pathogen (https://github.com/tpope/vim-pathogen):
+" pathogen.vim is put into ~/.vim/autoload/pathogen.vim .
+" It enables loading bundles from ~/.vim/bundles/
+" == NOTE: replacet by natice vim packages in v8 ==
+"execute pathogen#infect()
+
+syntax on          " syntax highlighting
+filetype on        " filtype detection
+filetype indent on " filetype-specific intention
+filetype plugin on " filetype-specific plugins
+
+"colorscheme solarized
+"colorscheme default
+set background=dark
+
+set cindent
+
+set incsearch
+set hlsearch
+
+set number
+
+"if &syntax == "c"
+"	set foldmethod=syntax
+"endif
+
+set textwidth=80
+
+au FileType c,cpp,go,shell,python call rainbow#load()
+" activate globally:
+let g:rainbow_active = 1
+
+" bloodstains:
+" (highlight overly long lines same as TODOs)
+"
+"autocmd BufNewFile,BufRead *.c,*.h exec 'match Todo /\%>' . &textwidth . 'v.\+/'
+"autocmd BufWinEnter *.c,*.h let w:m2=matchadd('ErrorMsg', '\%>' . &textwidth . 'v.\+', -1)
+function BloodstainsOn()
+	let w:m2=matchadd('ErrorMsg', '\%>' . &textwidth . 'v.\+', -1)
+endfunction
+
+"call BloodstainsOn()
+
+function BloodstainsOff()
+	let w:m2=""
+	"if (exists("w:m2"))
+	"	unlet w:m2
+	"	"let w:m2=""
+	"endif
+endfunction
+
+" for python, use expandtab and tablength of 4:
+autocmd FileType python setlocal et ts=4 sw=4
+
+function ActivateInvisibleCharIndicator()
+        syntax match TrailingSpace "[ \t]\+$" display containedin=ALL
+        highlight TrailingSpace ctermbg=Red
+endfunction
+
+"if has("syntax") && (&t_Co > 2 || has("gui_running"))
+if has("syntax")
+     syntax on
+     "function! ActivateInvisibleCharIndicator()
+     "        syntax match TrailingSpace "[ \t]\+$" display containedin=ALL
+     "        highlight TrailingSpace ctermbg=Red
+     "endf
+     autocmd BufNewFile,BufRead * call ActivateInvisibleCharIndicator()
+endif
+
+" find cursor by highlighting word under cursor with 'C-K'
+function VIMRCWhere()
+    if !exists("s:highlightcursor")
+        match Todo /\k*\%#\k*/
+        let s:highlightcursor=1
+    else
+        match None
+        unlet s:highlightcursor
+    endif
+endfunction
+map <C-K> :call VIMRCWhere()<CR> 
+
+" powerline / status
+"python from powerline.vim import setup as powerline_setup
+"python powerline_setup()
+"python del powerline_setup
+set laststatus=2
+set t_Co=256
+
+" '500 => remember the position for the last 500 files
+" <20000 store registers up to 20000 lines
+set viminfo='500,<20000
+
+map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+
+" Show tabs, trailing whitespace, and continued lines visually
+set list listchars=tab:»·,extends:…
+"set list listchars=tab:»·,trail:·,extends:…
+
+" this should be configured to different keys...
+map <C-Y> :set list listchars=tab:\ \ <CR>
+map <C-X> :set list listchars=tab:»·,extends:…<CR>
+
+"" also open Highlighting-File in older vim
+"if version < 600
+"	let mysyntaxfile = "~/.vim/syntax/xpress.vim"
+"endif
+
+" Highlighting einschalten
+"syntax on
+
+" Cursor-Tasten sollen nach Display-Zeile arbeiten, nicht nach
+" echter Textzeile
+noremap j gj
+noremap k gk
+
+" Absatz formatieren
+map <C-j> v<S-}>gq<End>
+
+" Line-Wrapping an Wortgrenzen und nicht hart am Zeilenende
+set linebreak
+
+set pastetoggle=<F12>
+
+" doxygen
+let g:DoxygenToolkit_authorName="Michael Adam"
+let g:DoxygenToolkit_licenseTag="GPL"
+"let g:DoxygenToolkit_undocTag="DOXIGEN_SKIP_BLOCK"
+"let g:DoxygenToolkit_briefTag_funcName = "no"
+"let g:DoxygenToolkit_commentType = "C"
+
+"let g:DoxygenToolkit_briefTag_pre = " @brief "
+"let g:DoxygenToolkit_briefTag_post = ""
+"let g:DoxygenToolkit_paramTag_pre = " @param "
+"let g:DoxygenToolkit_paramTag_post = " "
+"let g:DoxygenToolkit_returnTag = " @return "
+"let g:DoxygenToolkit_fileTag = " @file "
+"let g:DoxygenToolkit_authorTag = " @author "
+"let g:DoxygenToolkit_dateTag = " @date "
+"let g:DoxygenToolkit_blockTag = " @name "
+"let g:DoxygenToolkit_classTag = " @class "
+"let g:DoxygenToolkit_startCommentTag = "/**"
+"let g:DoxygenToolkit_startCommentBlock = "/*"
+"let g:DoxygenToolkit_interCommentTag = "*"
+"let g:DoxygenToolkit_endCommentTag = "*/"
+"let g:DoxygenToolkit_endCommentBlock = " */"
+
+map <F10> :w!<CR>:!aspell check %<CR>:e! %<CR>
+
+function! CommitMessages()
+    let g:git_ci_msg_user = substitute(system("git config --get user.name"), '\n$', '', '')
+    let g:git_ci_msg_email = substitute(system("git config --get user.email"), '\n$', '', '')
+
+    nmap S OSigned-off-by: <C-R>=printf("%s <%s>", g:git_ci_msg_user, g:git_ci_msg_email)<CR><ESC>
+    nmap R OReviewed-by: <C-R>=printf("%s <%s>", g:git_ci_msg_user, g:git_ci_msg_email)<CR><ESC>
+    iab #S Signed-off-by: <C-R>=printf("%s <%s>", g:git_ci_msg_user, g:git_ci_msg_email)<CR>
+    iab #R Reviewed-by: <C-R>=printf("%s <%s>", g:git_ci_msg_user, g:git_ci_msg_email)<CR>
+    iab #O Signed-off-by:
+    iab #V Reviewed-by:
+    iab #P Pair-Programmed-With:
+    iab ME <C-R>=printf("%s <%s>", g:git_ci_msg_user, g:git_ci_msg_email)<CR>
+    iab MER Michael<SPACE>Adam<SPACE><obnox@redhat.com>
+    iab MERH Michael<SPACE>Adam<SPACE><madam@redhat.com>
+    iab ASN Andreas<SPACE>Schneider<SPACE><asn@samba.org>
+    iab VLEN Volker<SPACE>Lendecke<SPACE><vl@samba.org>
+    iab METZE Stefan<SPACE>Metzmacher<SPACE><metze@samba.org>
+    iab JRA Jeremy<SPACE>Allison<SPACE><jra@samba.org>
+    iab AMBI Christian<SPACE>Ambach<SPACE><ambi@samba.org>
+    iab GBECK Gregor<SPACE>Beck<SPACE><gbeck@sernet.de>
+    iab BBAU Bjoern<SPACE>Baumbach<SPACE><bb@sernet.de>
+"    iab BBAU Bj�rn<SPACE>Baumbach<SPACE><bb@sernet.de>
+    iab OBNOX Michael<SPACE>Adam<SPACE><obnox@samba.org>
+    iab AMITAY Amitay<SPACE>Isaacs<SPACE><amitay@gmail.com>
+    iab DDISS David<SPACE>Disseldorp<SPACE><ddiss@samba.org>
+    iab ABART Andrew<SPACE>Bartlett<SPACE><abartlet@samba.org>
+    iab GDE Guenther<SPACE>Deschner<SPACE><gd@samba.org>
+    iab MAT Matthieu<SPACE>Patou<SPACE><mat@matws.net>
+    iab MATs Matthieu<SPACE>Patou<SPACE><mat@samba.org>
+    iab SLOW Ralph<SPACE>Boehme<SPACE><slow@samba.org>
+    iab IRA Ira<SPACE>Cooper<SPACE><ira@samba.org>
+    iab JOSE Jose<SPACE>A.<SPACE>Rivera<SPACE><jarrpa@samba.org>
+    iab URI Uri<SPACE>Simchoni<SPACE><uri@samba.org>
+    iab ANOOP Anoop<SPACE>C<SPACE>S<SPACE><anoopcs@redhat.com>
+    iab TALUR Raghavendra<SPACE>Talur<SPACE><rtalur@redhat.com>
+    iab ASHIQ Mohamed<SPACE>Ashiq<SPACE>Liyazudeen<SPACE><mliyazud@redhat.com>
+    iab PHLOG John<SPACE>Mulligan<SPACE><jmulligan@redhat.com>
+endfunction
+autocmd BufWinEnter COMMIT_EDITMSG,*.diff,*.patch,*.patches.txt call CommitMessages()
+
+
+" debug macro
+iab YDebug DBG_ERR("=== OBNOX (%s) === : \n", __location__);
+
+" cscope settings
+if has('cscope') && filereadable("/usr/bin/cscope")
+    set csto=0
+    set cscopetag
+    set nocsverb
+    if filereadable("cscope.out")
+        cs add cscope.out
+    endif
+    set csverb
+
+    let x = "sgctefd"
+    while x != ""
+        let y = strpart(x, 0, 1) | let x = strpart(x, 1)
+        exec "nmap <C-j>" . y . " :cscope find " . y .
+                    \ " <C-R>=expand(\"\<cword\>\")<CR><CR>"
+        exec "nmap <C-j><C-j>" . y . " :scscope find " . y .
+                    \ " <C-R>=expand(\"\<cword\>\")<CR><CR>"
+    endwhile
+    nmap <C-j>i      :cscope find i ^<C-R>=expand("<cword>")<CR><CR>
+    nmap <C-j><C-j>i :scscope find i ^<C-R>=expand("<cword>")<CR><CR>
+    " 0 or s: Find this C symbol
+    " 1 or g: Find this definition
+    " 2 or d: Find functions called by this function
+    " 3 or c: Find functions calling this function
+    " 4 or t: Find this text string
+    " 6 or e: Find this egrep pattern
+    " 7 or f: Find this file
+    " 8 or i: Find files #including this file
+endif
+
+nmap <F8> :TagbarToggle<CR>
+
+"setlocal spell spelllang=en_us
+"set spell spelllang=en_us
+
+"
+" ENTE
