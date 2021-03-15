@@ -1,0 +1,6 @@
+pack	vim-fugitive	git@github.com:tpope/vim-fugitive.git
+pack	vim-go		git@github.com:fatih/vim-go.git
+pack	vim-gitgutter	git@github.com:airblade/vim-gitgutter.git
+pack	lightline	git@github.com:itchyny/lightline.vim.git
+pack	ale		git@github.com:dense-analysis/ale.git
+pack	vim-rainbow	git@github.com:frazrepo/vim-rainbow.git
