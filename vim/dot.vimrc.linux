@@ -13,15 +13,15 @@ set shiftwidth=8
 " Activate pathogen (https://github.com/tpope/vim-pathogen):
 " pathogen.vim is put into ~/.vim/autoload/pathogen.vim .
 " It enables loading bundles from ~/.vim/bundles/
-execute pathogen#infect()
+"execute pathogen#infect()
 
 syntax on          " syntax highlighting
 filetype on        " filtype detection
 filetype indent on " filetype-specific intention
 filetype plugin on " filetype-specific plugins
 
-colorscheme solarized
-"colorscheme default
+"colorscheme solarized
+colorscheme default
 set background=dark
 
 set cindent
@@ -58,6 +58,7 @@ endfunction
 
 " for python, use expandtab and tablength of 4:
 autocmd FileType python setlocal et ts=4 sw=4
+autocmd FileType sh  setlocal et ts=4 sw=4
 
 function ActivateInvisibleCharIndicator()
         syntax match TrailingSpace "[ \t]\+$" display containedin=ALL
